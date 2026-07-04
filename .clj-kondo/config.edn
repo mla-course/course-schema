@@ -1,0 +1,54 @@
+{:linters
+ {;; --- Namespace hygiene ---
+  :unused-namespace          {:level :error}
+  :unused-referred-var       {:level :error}
+  :duplicate-require         {:level :error}
+  :refer-all                 {:level :error}
+  :consistent-alias          {:level :error}
+
+  ;; --- Symbol resolution ---
+  :unresolved-symbol         {:level :error}
+  :unresolved-namespace      {:level :error}
+
+  ;; --- Bindings ---
+  :unused-binding            {:level :error}
+  :unused-private-var        {:level :error}
+
+  ;; --- Style / correctness ---
+  :single-key-in             {:level :warning}
+  :shadowed-var              {:level :warning}
+  :misplaced-docstring       {:level :warning}
+  :missing-docstring         {:level :off} ; maybe off if noisy
+
+  ;; --- ClojureScript-specific ---
+  :invalid-arity             {:level :error}
+  :type-mismatch             {:level :error}
+
+  ;; --- Redundancy ---
+  :redundant-do              {:level :warning}
+  :redundant-let             {:level :warning}
+  :redundant-expression      {:level :warning}
+
+  ;; --- Cond branch exhaustion ---
+  :cond-else                 {:level :warning}
+
+  ;; --- Macros ---
+  :unused-import             {:level :error}}
+
+ :lint-as
+ { }
+
+ ;; --- Namespace-level overrides ---
+ :config-in-ns {}
+
+ ;; --- Analysis settings ---
+ :analysis
+ {:arglists           true   ; enables better arity inference for downstream tooling (LSP etc.)
+  :locals             true
+  :keywords           true
+  :java-class-usages  true}
+
+ :output
+ {:progress         true
+  :canonical-paths  true}}
+
