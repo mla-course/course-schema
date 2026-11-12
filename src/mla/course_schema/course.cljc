@@ -25,8 +25,7 @@
    [:updated-by        {:optional true} p/NonBlankStr]
    [:published-at      {:optional true} p/DateTime]
    [:url               {:optional true} p/URL]
-   ;; any relative path to media asset will be resolved against this url
-   ;; forming fulpath, when not present the fallback is to use `:url`
+   ;; relative media paths resolve against this url; falls back to `:url`
    [:assets-url        {:optional true} p/URL]
    [:repository        {:optional true} p/URL]
    [:org-mode-source-url {:optional true} p/URL]
@@ -96,16 +95,6 @@
    [:exercises  ExercisesSectionSpec]])
 
 ;; =============================================================================
-;; Section Import Specs
-;; =============================================================================
-
-(def AnyLessonSectionImportSpec
-  [:multi {:dispatch :key :default :text}
-   [:vocabulary VocabularySectionSpec]
-   [:text       TextSectionSpec]
-   [:exercises  ExercisesSectionSpec]])
-
-;; =============================================================================
 ;; Lessons
 ;; =============================================================================
 
@@ -116,17 +105,14 @@
    [:description {:optional true} h/InlineHiccupContent]
    [:icon        {:optional true} p/NonBlankStr]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
-   [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseImportSpec]]]])
+   [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
 
 ;; =============================================================================
 ;; Lesson Imports
 ;; =============================================================================
 
 (def LessonImportSpec
-  [:and
-   (imp/->import-schema LessonSpec)
-   [:map
-    [:sections {:optional true} [:vector AnyLessonSectionImportSpec]]]])
+  (imp/->import-schema LessonSpec))
 
 ;; =============================================================================
 ;; Courses
@@ -197,17 +183,9 @@
 ;; Course Imports
 ;; =============================================================================
 
-(defn- ->course-import-spec
-  "The lenient authoring counterpart of the export course `spec`:
-   generated fields become optional, and lessons are checked against
-   `LessonImportSpec`. `:lessons` stays optional, as it is on export."
-  [spec]
-  [:and (imp/->import-schema spec)
-   [:map [:lessons [:vector LessonImportSpec]]]])
-
-(def CourseImportSpec         (->course-import-spec CourseSpec))
-(def LanguageCourseImportSpec (->course-import-spec LanguageCourseSpec))
-(def ChineseCourseImportSpec  (->course-import-spec ChineseCourseSpec))
+(def CourseImportSpec         (imp/->import-schema CourseSpec))
+(def LanguageCourseImportSpec (imp/->import-schema LanguageCourseSpec))
+(def ChineseCourseImportSpec  (imp/->import-schema ChineseCourseSpec))
 
 (def AnyCourseImportSpec
   [:multi {:dispatch :type}

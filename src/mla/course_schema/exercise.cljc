@@ -69,7 +69,8 @@
     [:type      [:= :sentence-order]]
     [:sentences [:vector {:min 2} h/InlineHiccupContent]]]))
 
-(def ClozeTextSegmentSpec
+(def TextSegmentSpec
+  "A literal text run, shared by the cloze and placement exercises."
   [:map
    [:kind  [:= :text]]
    [:value h/TextOrRubyHiccup]])
@@ -82,7 +83,7 @@
 
 (def ClozeSegmentSpec
   [:multi {:dispatch :kind}
-   [:text  ClozeTextSegmentSpec]
+   [:text  TextSegmentSpec]
    [:blank ClozeBlankSegmentSpec]])
 
 (def ClozeMultiExerciseSpec
@@ -108,11 +109,6 @@
     [:sentences   [:vector {:min 1} ClozeDragSentenceSpec]]]))
 
 ;; --- Word Placement Exercise ---
-(def PlacementTextSegmentSpec
-  [:map
-   [:kind  [:= :text]]
-   [:value h/TextOrRubyHiccup]])
-
 (def PlacementGapSegmentSpec
   "A `^` decoy gap (`:answer-index` absent), or the correct gap for the
    nth entry of the sentence's `:words` list (1-based, matching
@@ -123,14 +119,13 @@
 
 (def PlacementSegmentSpec
   [:multi {:dispatch :kind}
-   [:text PlacementTextSegmentSpec]
+   [:text TextSegmentSpec]
    [:gap  PlacementGapSegmentSpec]])
 
 (def WordPlacementSentenceSpec
-  [:and
-   [:map
-    [:segments [:vector {:min 1} PlacementSegmentSpec]]
-    [:words    [:vector {:min 1} h/TextOrRubyHiccup]]]])
+  [:map
+   [:segments [:vector {:min 1} PlacementSegmentSpec]]
+   [:words    [:vector {:min 1} h/TextOrRubyHiccup]]])
 
 (def WordPlacementExerciseSpec
   (mu/merge
@@ -186,7 +181,7 @@
    [:cloze-multi       ClozeMultiExerciseSpec]
    [:cloze-drag        ClozeDragExerciseSpec]
    [:word-placement    WordPlacementExerciseSpec]
-   [:word-reorder   WordReorderExerciseSpec]])
+   [:word-reorder      WordReorderExerciseSpec]])
 
 (def ExerciseImportSpec
   (imp/->import-schema ExerciseSpec))

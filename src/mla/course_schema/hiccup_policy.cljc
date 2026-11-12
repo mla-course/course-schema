@@ -1,7 +1,5 @@
 (ns mla.course-schema.hiccup-policy
-  "What course-authored hiccup may contain — one allow-list, as data, shared by
-   the renderer optionally, the schema (use `allowed-tag?` / `allowed-attr?` in the
-   `::hiccup` registry to *reject* instead)."
+  "What course-authored hiccup may contain."
   (:require [clojure.string :as str]))
 
 (def void-tags

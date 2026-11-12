@@ -60,11 +60,3 @@
                         [:attrs    [:? [:map-of keyword? :any]]]
                         [:children [:* [:schema [:ref ::node]]]]]]]}}
    [:vector [:schema [:ref ::node]]]])
-
-(def ImageContent
-  "An inline Hiccup image element (`[:img {:src ... :alt ...}]`)"
-  [:tuple [:= :img] [:map
-                     [:src p/NonBlankStr]
-                     [:alt {:optional true} p/NonBlankStr]
-                     [:id {:optional true} p/NonBlankStr]
-                     [:class {:optional true} p/NonBlankStr]]])

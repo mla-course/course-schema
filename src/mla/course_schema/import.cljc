@@ -31,7 +31,7 @@
    `:schema` and `:ref` are also special-cased, but the opposite way —
    left completely untouched rather than reconstructed via `into-schema`.
    These two show up together whenever a spec defines its own local
-   registry for a recursive shape (e.g. `exercise/InlineHiccupContent`'s
+   registry for a recursive shape (e.g. `hiccup/InlineHiccupContent`'s
    `[:schema {:registry {::node ...}} [:vector [:schema [:ref ::node]]]]`).
    `m/walk` is postorder, so by the time our walker reaches the outer
    `:schema` node it has already recursed into every `:ref` inside it;
