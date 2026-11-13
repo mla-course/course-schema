@@ -23,12 +23,12 @@
    [:canonical   {:optional true} h/InlineHiccupContent]])
 
 (def SentenceBuilderExerciseSpec
-  (mu/merge
+  [:and
    ;; canonical belongs to each sentence, not to the exercise
    (mu/dissoc ExerciseCommonSpec :canonical)
    [:map
     [:type      [:= :sentence-builder]]
-    [:sentences [:vector {:min 1} SentenceBuilderSentenceSpec]]]))
+    [:sentences [:vector {:min 1} SentenceBuilderSentenceSpec]]]])
 
 (def QuizOptionSpec
   [:map
@@ -47,26 +47,26 @@
   [:enum :per-choice :all-or-nothing])
 
 (def MultipleChoiceExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type    [:= :multiple-choice]]
     [:options [:and [:vector {:min 2 :max 16} QuizOptionSpec] at-least-one-correct]]
-    [:scoring {:optional true} MultipleChoiceScoringSpec]]))
+    [:scoring {:optional true} MultipleChoiceScoringSpec]]])
 
 (def PairsExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type  [:= :pairs]]
-    [:pairs [:vector {:min 1} [:tuple h/InlineHiccupContent h/InlineHiccupContent]]]]))
+    [:pairs [:vector {:min 1} [:tuple h/InlineHiccupContent h/InlineHiccupContent]]]]])
 
 (def SentenceOrderExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type      [:= :sentence-order]]
-    [:sentences [:vector {:min 2} h/InlineHiccupContent]]]))
+    [:sentences [:vector {:min 2} h/InlineHiccupContent]]]])
 
 (def TextSegmentSpec
   "A literal text run, shared by the cloze and placement exercises."
@@ -86,11 +86,11 @@
    [:blank ClozeBlankSegmentSpec]])
 
 (def ClozeMultiExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type     [:= :cloze-multi]]
-    [:segments [:vector {:min 1} ClozeSegmentSpec]]]))
+    [:segments [:vector {:min 1} ClozeSegmentSpec]]]])
 
 ;; cloze-drag ─
 
@@ -101,11 +101,11 @@
   [:vector {:min 1} ClozeSegmentSpec])
 
 (def ClozeDragExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type        [:= :cloze-drag]]
-    [:sentences   [:vector {:min 1} ClozeDragSentenceSpec]]]))
+    [:sentences   [:vector {:min 1} ClozeDragSentenceSpec]]]])
 
 ;; --- Word Placement Exercise ---
 (def PlacementGapSegmentSpec
@@ -127,11 +127,11 @@
    [:words    [:vector {:min 1} h/TextOrRubyHiccup]]])
 
 (def WordPlacementExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type        [:= :word-placement]]
-    [:sentences   [:vector {:min 1} WordPlacementSentenceSpec]]]))
+    [:sentences   [:vector {:min 1} WordPlacementSentenceSpec]]]])
 
 (def WordReorderSegmentSpec
   [:multi {:dispatch :kind}
@@ -165,11 +165,11 @@
     word-reorder-answer-valid?]])
 
 (def WordReorderExerciseSpec
-  (mu/merge
+  [:and
    ExerciseCommonSpec
    [:map
     [:type        [:= :word-reorder]]
-    [:sentences   [:vector {:min 1} WordReorderSentenceSpec]]]))
+    [:sentences   [:vector {:min 1} WordReorderSentenceSpec]]]])
 
 (def ExerciseSpec
   [:multi {:dispatch :type}

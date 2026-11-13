@@ -10,7 +10,8 @@
                        [:name [:fn {:error/message "tag not allowed"} policy/allowed-tag?]]
                        [:props [:? [:map-of keyword? any?]]]
                        [:children [:* [:schema [:ref ::hiccup]]]]]]
-               ;; TODO narrow and fix [:exercise [:schema [:ref :schema/exercise]]]
+               ;; Embedded exercises are only checked for a `:type` here; `e/ExerciseSpec`
+               ;; validates them where a spec admits one (e.g. a lesson's `:content`).
                [:exercise [:map [:type keyword?]]]
                [:primitive [:orn
                             [:nil nil?]
@@ -60,3 +61,7 @@
                         [:attrs    [:? [:map-of keyword? :any]]]
                         [:children [:* [:schema [:ref ::node]]]]]]]}}
    [:vector [:schema [:ref ::node]]]])
+
+(def TitleHiccupContent
+  "A headline title: plain text and `:ruby` elements."
+  [:vector [:or :string [:schema RubyHiccup]]])

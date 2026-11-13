@@ -41,7 +41,7 @@
 (def LessonSectionSpec
   [:map
    [:key :keyword]
-   [:title {:optional true} h/InlineHiccupContent]
+   [:title {:optional true} h/TitleHiccupContent]
    [:icon {:optional true} p/NonBlankStr]
    [:content {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
 
@@ -100,7 +100,7 @@
 (def LessonSpec
   [:map
    [:id          :uuid]
-   [:title       h/InlineHiccupContent]
+   [:title       {:optional true} h/TitleHiccupContent]
    [:description {:optional true} h/InlineHiccupContent]
    [:icon        {:optional true} p/NonBlankStr]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
