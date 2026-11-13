@@ -4,23 +4,22 @@
             [mla.course-schema.dictionary :as d]
             [mla.course-schema.exercise :as e]
             [mla.course-schema.hiccup :as h]
-            [mla.course-schema.import :as imp]
             [mla.course-schema.version :as v]
             [mla.course-schema.primitives :as p]))
 
 (def CoursesCollectionSpec
   [:map
-   [:created-at  {:generated true} p/DateTime]
+   [:created-at  p/DateTime]
    [:updated-at  {:optional true} p/DateTime]
    [:title       {:optional true} p/NonBlankStr]
    [:courses    [:vector :map]]])
 
 (def ^:private CourseMetadataSpec
   [:map
-   [:version           {:generated true} [:int {:min 0 :max v/CURRENT_VERSION}]]
-   [:content-revision  {:generated true} [:int {:min 1}]]
-   [:created-by        {:generated true} p/NonBlankStr]
-   [:created-at        {:generated true} p/DateTime]
+   [:version           [:int {:min 0 :max v/CURRENT_VERSION}]]
+   [:content-revision  [:int {:min 1}]]
+   [:created-by        p/NonBlankStr]
+   [:created-at        p/DateTime]
    [:updated-at        {:optional true} p/DateTime]
    [:updated-by        {:optional true} p/NonBlankStr]
    [:published-at      {:optional true} p/DateTime]
@@ -100,19 +99,12 @@
 
 (def LessonSpec
   [:map
-   [:id          {:generated true} :uuid]
+   [:id          :uuid]
    [:title       h/InlineHiccupContent]
    [:description {:optional true} h/InlineHiccupContent]
    [:icon        {:optional true} p/NonBlankStr]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
    [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
-
-;; =============================================================================
-;; Lesson Imports
-;; =============================================================================
-
-(def LessonImportSpec
-  (imp/->import-schema LessonSpec))
 
 ;; =============================================================================
 ;; Courses
@@ -126,7 +118,7 @@
 (def ^:private CourseFieldsSpec
   "Fields shared by every course type"
   [:map
-   [:id          {:generated true} :uuid]
+   [:id          :uuid]
    [:title       p/NonBlankStr]
    [:icon        {:optional true} p/NonBlankStr]
    [:description {:optional true} p/NonBlankStr]
@@ -178,17 +170,3 @@
    [:base     CourseSpec]
    [:language LanguageCourseSpec]
    [:chinese  ChineseCourseSpec]])
-
-;; =============================================================================
-;; Course Imports
-;; =============================================================================
-
-(def CourseImportSpec         (imp/->import-schema CourseSpec))
-(def LanguageCourseImportSpec (imp/->import-schema LanguageCourseSpec))
-(def ChineseCourseImportSpec  (imp/->import-schema ChineseCourseSpec))
-
-(def AnyCourseImportSpec
-  [:multi {:dispatch :type}
-   [:base     CourseImportSpec]
-   [:language LanguageCourseImportSpec]
-   [:chinese  ChineseCourseImportSpec]])

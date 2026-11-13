@@ -1,12 +1,11 @@
 (ns mla.course-schema.exercise
   (:require [malli.util :as mu]
             [mla.course-schema.hiccup :as h]
-            [mla.course-schema.import :as imp]
             [mla.course-schema.primitives :as p]))
 
 (def ExerciseCommonSpec
   [:map
-   [:id {:generated true} :uuid]
+   [:id :uuid]
    [:annotate    {:optional true} [:vector [:maybe :keyword]]] ; per column, nil = none
    [:instruction {:optional true} h/InlineHiccupContent]
    [:hint        {:optional true} h/InlineHiccupContent]
@@ -182,6 +181,3 @@
    [:cloze-drag        ClozeDragExerciseSpec]
    [:word-placement    WordPlacementExerciseSpec]
    [:word-reorder      WordReorderExerciseSpec]])
-
-(def ExerciseImportSpec
-  (imp/->import-schema ExerciseSpec))

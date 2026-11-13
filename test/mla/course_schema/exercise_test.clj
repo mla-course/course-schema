@@ -205,14 +205,3 @@
         (is (m/validate sut/ExerciseSpec fixture)))))
   (testing "invalid: unrecognized :type"
     (is (invalid? sut/ExerciseSpec {:type :flashcard :id (id)}))))
-
-(deftest exercise-import-spec-test
-  (testing "authoring-side data with :id omitted validates against ExerciseImportSpec"
-    (doseq [[ex-type fixture] exercise-fixtures]
-      (testing ex-type
-        (is (m/validate sut/ExerciseImportSpec (dissoc fixture :id))))))
-
-  (testing "strict export-side ExerciseSpec requires :id to be present"
-    (doseq [[ex-type fixture] exercise-fixtures]
-      (testing ex-type
-        (is (invalid? sut/ExerciseSpec (dissoc fixture :id)))))))
