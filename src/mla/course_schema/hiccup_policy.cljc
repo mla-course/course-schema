@@ -117,7 +117,7 @@
     :li     #{:value}
     :time   #{:datetime}
     :data   #{:value}
-    :iframe #{:src :width :height :title :loading}
+    :iframe #{:src :width :height :title :loading :allowfullscreen :frameborder :referrerpolicy}
     :canvas #{:width :height}
     :button #{:type :disabled}
     :input  #{:type :name :checked :disabled}}
