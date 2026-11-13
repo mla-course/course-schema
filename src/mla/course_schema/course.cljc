@@ -4,6 +4,7 @@
             [mla.course-schema.dictionary :as d]
             [mla.course-schema.exercise :as e]
             [mla.course-schema.hiccup :as h]
+            [mla.course-schema.lang-block :as lb]
             [mla.course-schema.version :as v]
             [mla.course-schema.primitives :as p]))
 
@@ -41,7 +42,7 @@
 (def LessonSectionSpec
   [:map
    [:key :keyword]
-   [:title {:optional true} h/InlineHiccupContent]
+   [:title {:optional true} h/TitleHiccupContent]
    [:icon {:optional true} p/NonBlankStr]
    [:content {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
 
@@ -97,14 +98,18 @@
 ;; Lessons
 ;; =============================================================================
 
-(def LessonSpec
+(def ^:private LessonFieldsSpec
   [:map
    [:id          :uuid]
-   [:title       h/InlineHiccupContent]
+   [:title       {:optional true} h/TitleHiccupContent]
    [:description {:optional true} h/InlineHiccupContent]
    [:icon        {:optional true} p/NonBlankStr]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
    [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
+
+(def LessonSpec
+  "Lesson fields plus per-lesson lang-block overrides."
+  (mu/merge LessonFieldsSpec lb/LangBlockDefaultsSpec))
 
 ;; =============================================================================
 ;; Courses
@@ -136,6 +141,7 @@
   (reduce mu/merge
           [CourseMetadataSpec
            CourseFieldsSpec
+           lb/LangBlockDefaultsSpec
            [:map
             {:title "Base Course"
              :description "A generic course shell containing ordered lessons."
