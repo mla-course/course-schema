@@ -51,3 +51,8 @@
 (def lesson-keys
   "The keys a lesson may carry."
   (mu/keys c/LessonSpec))
+
+(defn exercise?
+  "Whether `x` is a map of one of the exercise kinds."
+  [x]
+  (and (map? x) (contains? e/exercise-types (:type x))))

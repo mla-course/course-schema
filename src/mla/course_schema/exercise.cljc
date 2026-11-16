@@ -181,3 +181,7 @@
    [:cloze-drag        ClozeDragExerciseSpec]
    [:word-placement    WordPlacementExerciseSpec]
    [:word-reorder      WordReorderExerciseSpec]])
+
+(def exercise-types
+  "The `:type` of every exercise kind."
+  (into #{} (map first) (drop 2 ExerciseSpec)))
