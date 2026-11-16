@@ -14,5 +14,6 @@
    [:lang-block-languages   {:optional true} [:vector {:min 1} LanguageGroupSpec]]
    [:lang-block-translation {:optional true} p/Locale]
    [:lang-block-annotate    {:optional true} [:map-of p/Locale :keyword]]
-   ;; positional: base language first, then one per ruby annotation
-   [:ruby-languages         {:optional true} [:vector {:min 1} p/Locale]]])
+   ;; TODO: this is only needed for org -> edn direction
+   ;; [:ruby-languages         {:optional true} [:vector {:min 1} p/Locale]]
+   ])
