@@ -23,8 +23,8 @@
                      :title "Introduction to Logic"
                      :version 0
                      :content-revision 1
-                     :created-by "admin"
                      :created-at "2026-07-04T12:00:00Z"
+                     :updated-at "2026-07-04T12:00:00Z"
                      :lessons []})))
 
   (testing "valid language course"
@@ -34,8 +34,8 @@
                      :title "Spanish 101"
                      :version 0
                      :content-revision 1
-                     :created-by "admin"
                      :created-at "2026-07-04T12:00:00Z"
+                     :updated-at "2026-07-04T12:00:00Z"
                      :source-lang :en
                      :target-lang :es
                      :lessons []})))
@@ -47,8 +47,8 @@
                      :title "Mandarin 101"
                      :version 0
                      :content-revision 1
-                     :created-by "admin"
                      :created-at "2026-07-04T12:00:00Z"
+                     :updated-at "2026-07-04T12:00:00Z"
                      :source-lang :en
                      :target-lang :zh-CN
                      :script :simplified

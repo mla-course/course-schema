@@ -10,9 +10,7 @@
   [:map
    [:alt-text p/NonBlankStr]
    [:alt-text-lang {:optional true} p/Locale]
-   [:long-description {:optional true} p/NonBlankStr]
-   [:high-contrast-url {:optional true} p/URL]
-   [:is-colorblind-safe {:optional true} :boolean]])
+   [:long-description {:optional true} p/NonBlankStr]])
 
 (def LicensingSpec
   [:map

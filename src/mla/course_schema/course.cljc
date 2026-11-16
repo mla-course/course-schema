@@ -19,16 +19,13 @@
   [:map
    [:version           [:int {:min 0 :max v/CURRENT_VERSION}]]
    [:content-revision  [:int {:min 1}]]
-   [:created-by        p/NonBlankStr]
    [:created-at        p/DateTime]
-   [:updated-at        {:optional true} p/DateTime]
-   [:updated-by        {:optional true} p/NonBlankStr]
+   [:updated-at        p/DateTime]
    [:published-at      {:optional true} p/DateTime]
    [:url               {:optional true} p/URL]
-   ;; relative media paths resolve against this url; falls back to `:url`
    [:assets-url        {:optional true} p/URL]
    [:repository        {:optional true} p/URL]
-   [:org-mode-source-url {:optional true} p/URL]
+   [:source-url        {:optional true} p/URL]
    [:author            {:optional true} p/NonBlankStr]
    [:authors           {:optional true} [:vector p/NonBlankStr]]
    [:email             {:optional true} p/NonBlankStr]
@@ -38,13 +35,11 @@
    [:license           {:optional true} p/License]
    [:compatibility-ver {:optional true} p/SemVer]])
 
-;; --- Base / Fallback Section Spec ---
 (def LessonSectionSpec
   [:map
    [:key :keyword]
-   [:title {:optional true} h/TitleHiccupContent]
-   [:icon {:optional true} p/NonBlankStr]
-   [:content {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
+   [:title h/TitleHiccupContent]
+   [:content [:vector [:or h/Hiccup e/ExerciseSpec]]]])
 
 (def TextSectionSpec
   (mu/merge
@@ -86,34 +81,23 @@
     [:key [:= :exercises]]
     [:content [:vector e/ExerciseSpec]]]))
 
-;; --- Top-Level Polymorphic Section Dispatcher ---
-
 (def AnyLessonSectionSpec
   [:multi {:dispatch :key :default :text}
    [:vocabulary VocabularySectionSpec]
    [:text       TextSectionSpec]
    [:exercises  ExercisesSectionSpec]])
 
-;; =============================================================================
-;; Lessons
-;; =============================================================================
-
 (def ^:private LessonFieldsSpec
   [:map
    [:id          :uuid]
    [:title       {:optional true} h/TitleHiccupContent]
    [:description {:optional true} h/InlineHiccupContent]
-   [:icon        {:optional true} p/NonBlankStr]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
    [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
 
 (def LessonSpec
   "Lesson fields plus per-lesson lang-block overrides."
   (mu/merge LessonFieldsSpec lb/LangBlockDefaultsSpec))
-
-;; =============================================================================
-;; Courses
-;; =============================================================================
 
 (def CreditsSpec
   [:map
@@ -125,7 +109,6 @@
   [:map
    [:id          :uuid]
    [:title       p/NonBlankStr]
-   [:icon        {:optional true} p/NonBlankStr]
    [:description {:optional true} p/NonBlankStr]
    [:summary     {:optional true} p/NonBlankStr]
    [:lang        {:optional true} p/Locale]

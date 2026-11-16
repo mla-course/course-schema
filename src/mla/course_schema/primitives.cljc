@@ -6,7 +6,7 @@
    :keyword
    [:fn {:error/message "must be a BCP-47 locale keyword (e.g. :en, :zh-CN)"}
     (fn [k]
-      (boolean (re-matches #"^[a-z]{2,3}(?:-[A-Za-z]{4})?(?:-[A-Z]{2}|\d{3})?$"
+      (boolean (re-matches #"^[a-z]{2,3}(?:-[A-Za-z]{4})?(?:-(?:[A-Z]{2}|\d{3}))?$"
                            (name k))))]])
 
 (def NonBlankStr
