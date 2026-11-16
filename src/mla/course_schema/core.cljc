@@ -36,6 +36,8 @@
 
 (defn explain-course [data] (explain-with-registry :schema/course-any data))
 
+(defn explain-exercise [data] (explain-with-registry :schema/exercise data))
+
 (def ^:private course-specs
   {:base     c/CourseSpec
    :language c/LanguageCourseSpec
