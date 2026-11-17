@@ -40,7 +40,11 @@
     :msubsup :munder :mover :munderover :mtable :mtr :mtd :mspace :mstyle
     :mpadded :menclose :semantics :annotation})
 
-(def allowed-tags (into (into html-tags svg-tags) math-tags))
+(def raw-tags
+  "Author markup passed through as a string. The renderer must sanitise it."
+  #{:raw-html :raw-latex})
+
+(def allowed-tags (into #{} cat [html-tags svg-tags math-tags raw-tags]))
 
 (def dropped-tags
   "Removed *with* their content. Every other unknown tag is unwrapped: its
@@ -65,10 +69,9 @@
 ;;; Attributes ─
 
 (def global-attrs
-  "Deliberately absent: :id outside SVG (DOM clobbering), :style (overlays,
-   tracking), :role, :tabindex, every on* handler, :srcdoc, :srcset, :ref,
-   :key, :dangerouslySetInnerHTML."
-  #{:class :lang :dir :title})
+  "Deliberately absent: :style, :role, :tabindex, every
+   on* handler, :srcdoc, :srcset, :ref, :key, :dangerouslySetInnerHTML."
+  #{:id :class :lang :dir :title})
 
 (def svg-attrs
   "SVG-native spelling (hyphenated as in markup; the renderer camel-cases

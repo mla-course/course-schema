@@ -48,8 +48,9 @@
     (when (> from target)
       (throw (ex-info (str "Course is v" from ", newer than supported v" target)
                       {:from from :target target})))
-    (result (assoc (run-steps migrations inc (range from target) course) :version target)
-            from target)))
+    (result (-> (run-steps migrations inc (range from target) course)
+            (assoc :version target))
+        from target)))
 
 (defn rollback
   "Downgrade `course` from its detected version down to `target`
