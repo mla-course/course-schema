@@ -35,11 +35,16 @@
    [:license           {:optional true} p/License]
    [:compatibility-ver {:optional true} p/SemVer]])
 
+(def ^:private ContentItemSpec
+  [:multi {:dispatch #(if (map? %) :exercise :hiccup)}
+   [:exercise e/ExerciseSpec]
+   [:hiccup   h/Hiccup]])
+
 (def LessonSectionSpec
   [:map
    [:key :keyword]
    [:title h/TitleHiccupContent]
-   [:content [:vector [:or h/Hiccup e/ExerciseSpec]]]])
+   [:content [:vector ContentItemSpec]]])
 
 (def TextSectionSpec
   (mu/merge
@@ -93,7 +98,7 @@
    [:title       {:optional true} h/TitleHiccupContent]
    [:description {:optional true} h/InlineHiccupContent]
    [:sections    {:optional true} [:vector AnyLessonSectionSpec]]
-   [:content     {:optional true} [:vector [:or h/Hiccup e/ExerciseSpec]]]])
+   [:content     {:optional true} [:vector ContentItemSpec]]])
 
 (def LessonSpec
   "Lesson fields plus per-lesson lang-block overrides."
