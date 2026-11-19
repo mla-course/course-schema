@@ -8,45 +8,45 @@
             [mla.course-schema.primitives :as p]))
 
 (def library-registry
-  {:schema/locale                (m/schema p/Locale)
-   :schema/asset                 (m/schema a/AssetSpec)
-   :schema/language-entry        (m/schema d/LanguageEntrySpec)
-   :schema/chinese-entry         (m/schema d/ChineseEntrySpec)
-   :schema/exercise              (m/schema e/ExerciseSpec)
-   :schema/course-base           (m/schema c/CourseSpec)
-   :schema/course-language       (m/schema c/LanguageCourseSpec)
-   :schema/course-chinese        (m/schema c/ChineseCourseSpec)
-   :schema/course-any            (m/schema c/AnyCourseSpec)})
+  {:schema/locale          (m/schema p/Locale)
+   :schema/asset           (m/schema a/AssetSpec)
+   :schema/language-entry  (m/schema d/LanguageEntrySpec)
+   :schema/chinese-entry   (m/schema d/ChineseEntrySpec)
+   :schema/exercise        (m/schema e/ExerciseSpec)
+   :schema/course-base     (m/schema c/CourseSpec)
+   :schema/course-language (m/schema c/LanguageCourseSpec)
+   :schema/course-chinese  (m/schema c/ChineseCourseSpec)
+   :schema/course-any      (m/schema c/AnyCourseSpec)})
 
-(defn- validate-with-registry [schema-key data]
-  (m/validate schema-key data {:registry library-registry}))
+(def ^:private compiled
+  "Registry key -> schema resolved against `library-registry`, built once."
+  (update-vals library-registry #(m/schema % {:registry library-registry})))
 
-(defn- explain-with-registry [schema-key data]
-  (m/explain schema-key data {:registry library-registry}))
+(defn- validator-of [k] (m/validator (compiled k)))
+(defn- explainer-of [k] (m/explainer (compiled k)))
 
-(defn valid-course? [data] (validate-with-registry :schema/course-any data))
-(defn valid-base-course? [data] (validate-with-registry :schema/course-base data))
-(defn valid-language-course? [data] (validate-with-registry :schema/course-language data))
-(defn valid-chinese-course? [data] (validate-with-registry :schema/course-chinese data))
-(defn valid-language-entry? [data] (validate-with-registry :schema/language-entry data))
-(defn valid-chinese-language-entry? [data]
-  (validate-with-registry :schema/chinese-entry data))
+;; Validators / explainers are built at namespace load, not per call.
 
-(defn valid-url? [data] (m/validate p/URL data))
+(def valid-course?                 (validator-of :schema/course-any))
+(def valid-base-course?            (validator-of :schema/course-base))
+(def valid-language-course?        (validator-of :schema/course-language))
+(def valid-chinese-course?         (validator-of :schema/course-chinese))
+(def valid-language-entry?         (validator-of :schema/language-entry))
+(def valid-chinese-language-entry? (validator-of :schema/chinese-entry))
+(def valid-url?                    (m/validator p/URL))
 
-(defn explain-course [data] (explain-with-registry :schema/course-any data))
+(def explain-course   (explainer-of :schema/course-any))
+(def explain-exercise (explainer-of :schema/exercise))
 
-(defn explain-exercise [data] (explain-with-registry :schema/exercise data))
-
-(def ^:private course-specs
-  {:base     c/CourseSpec
-   :language c/LanguageCourseSpec
-   :chinese  c/ChineseCourseSpec})
+(def ^:private course-key-sets
+  {:base     (mu/keys c/CourseSpec)
+   :language (mu/keys c/LanguageCourseSpec)
+   :chinese  (mu/keys c/ChineseCourseSpec)})
 
 (defn course-keys
   "The keys a `course-type` course may carry."
   [course-type]
-  (mu/keys (get course-specs course-type c/CourseSpec)))
+  (get course-key-sets course-type (:base course-key-sets)))
 
 (def lesson-keys
   "The keys a lesson may carry."
