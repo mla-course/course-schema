@@ -1,20 +1,13 @@
 (ns mla.course-schema.dictionary
-  (:require [mla.course-schema.primitives :as p]
+  (:require [clojure.set :as set]
+            [mla.course-schema.primitives :as p]
             [mla.course-schema.hiccup :as h]))
 
 (def PartOfSpeech
   [:enum
    :noun :proper-noun :verb :adjective :adverb :pronoun :determiner :article
    :preposition :postposition :conjunction :interjection :particle :numeral
-   :classifier :symbol :punctuation :phrase])
-
-(def PartOfSpeechSubtype
-  [:enum
-   :demonstrative :personal :possessive :interrogative :relative :reflexive
-   :reciprocal :indefinite :definite :common :collective :mass :countable
-   :transitive :intransitive :ditransitive :linking :phrasal :stative
-   :cardinal :ordinal :manner :degree :frequency :temporal :locative
-   :auxiliary :modal :copula])
+   :complement :classifier :symbol :punctuation :phrase])
 
 (def part-of-speech-subtypes
   {:pronoun    #{:demonstrative :personal :possessive :interrogative :relative
@@ -27,6 +20,10 @@
    :numeral    #{:cardinal :ordinal}
    :adverb     #{:manner :degree :frequency :temporal :locative}
    :phrase     #{}})
+
+(def PartOfSpeechSubtype
+  "Every subtype allowed for some part of speech."
+  (into [:enum] (sort (apply set/union (vals part-of-speech-subtypes)))))
 
 (defn part-of-speech-subtypes-valid?
   [assignment]
