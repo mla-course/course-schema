@@ -1,5 +1,6 @@
 (ns mla.course-schema.exercise
-  (:require [malli.util :as mu]
+  (:require [malli.core :as m]
+            [malli.util :as mu]
             [mla.course-schema.hiccup :as h]
             [mla.course-schema.primitives :as p]))
 
@@ -184,4 +185,4 @@
 
 (def exercise-types
   "The `:type` of every exercise kind."
-  (into #{} (map first) (drop 2 ExerciseSpec)))
+  (into #{} (map first) (m/children (m/schema ExerciseSpec))))
