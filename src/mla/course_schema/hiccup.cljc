@@ -57,8 +57,8 @@
     {::node [:orn
              [:text    string?]
              [:element [:catn
-                        [:tag      keyword?]
-                        [:attrs    [:? [:map-of keyword? :any]]]
+                        [:tag [:fn {:error/message "tag not allowed"} policy/allowed-tag?]]
+                        [:attrs [:? [:map-of keyword? :any]]]
                         [:children [:* [:schema [:ref ::node]]]]]]]}}
    [:vector [:schema [:ref ::node]]]])
 
